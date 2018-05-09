@@ -27,3 +27,21 @@
 
 最后强调一点，只有通过事物发展的数量、质量两大方面，从横比、纵比角度进行全方位的比较，我们才能够全面的了解事物发展的好坏。
 
+select * from
+(select * from 
+gdm.gdm_teacher_base_info
+where 
+dt='2018-05-08'
+and school_id=255767
+and authentication_state=1
+and subject='ENGLISH'
+and is_cheating_teacher=1
+and is_true_teacher=1)a
+left join(
+select * from
+vbawork_business.vb_user_session_online_stat
+where
+dt='2018-05-08'
+and user_type='1'
+)b
+on a.teacher_id=b.user_id

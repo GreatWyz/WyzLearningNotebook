@@ -50,9 +50,68 @@ on a.teacher_id=b.user_id
 
 @2018/5/10
 
-**开启hadoop**
-进入sbin文件夹  
+**开启hadoop**  
+进入sbin文件夹  
 输入hadoop namenode -format，格式化namenode  
 输入./start-all.sh开启所有服务  
 输入jps可以查看所有Java进程和pid  
-用浏览器访问localhost：
+用浏览器访问localhost：8088和localhost：50070
+
+```
+--2.中学全量数据
+select d.group_name,a.*,c.*,e.*,f.*,h.*,g.group_adm_name,g.school_adm_name
+from
+(select distinct  school_id,school_name,school_level,province_name,city_name,county_name,student_total_count,
+student_authed_count,tm_inc_reg_stu_count,tm_inc_auth_stu_count
+from gdm.gdm_crm_school_dimension
+where dt='2018-05-09'
+and disabled=false
+and school_level='MIDDLE'
+)a
+left join
+(select distinct id,authentication_state,vip   ---authentication_state为学校鉴定状态，vip为学校级别，该字段有问题，弃用
+from fdm.fdm_mysql_vox_school_chain
+where dp='ACTIVE'
+)c on a.school_id=c.id
+left join
+(select distinct group_name,province_name
+from vbawork_business.vb_agent_group_region_ref
+where dt='2018-05'
+and group_name in ('北区','南区')
+and group_name is not null
+) d on a.province_name=d.province_name
+left join 
+(select school_id,
+count (distinct case when (substr(first_login_time,1,7)='2018-04' or substr(first_login_time,1,7)='2018-05') then teacher_id end) register_num_Mar,
+count(distinct case when (substr(first_login_time,1,7)='2018-04' or substr(first_login_time,1,7)='2018-05') and auth_state =1 then teacher_id end) auth_num_Mar,
+count(distinct case when first_login_time is not null then teacher_id end) register_num_all,
+count(distinct case when auth_state =1 then teacher_id end) auth_num_all
+from gdm.gdm_teacher_login_status  --老师登录信息表
+where dt='2018-05-09'
+group by school_id
+) e on a.school_id=e.school_id
+left join
+(select distinct school_id,auth_fin_3_suit_num,new_settle_num,short_flow_stu_num,long_flow_stu_num,auth_fin_1_suit_num,auth_fin_2_suit_num,no_auth_fin_1_suit_num,
+no_auth_fin_2_suit_num,no_auth_fin_3_suit_num
+from vbawork_business.vb_17_market_school_kpi_day   --学校业绩表 
+where dt='2018-04-30'
+and subject='ENGLISH'
+)f on a.school_id=f.school_id
+left join
+(select distinct school_id,auth_fin_3_suit_num,new_settle_num,short_flow_stu_num,long_flow_stu_num,auth_fin_1_suit_num,auth_fin_2_suit_num,no_auth_fin_1_suit_num,
+no_auth_fin_2_suit_num,no_auth_fin_3_suit_num
+from vbawork_business.vb_17_market_school_kpi_day   --学校业绩表 
+where dt='2018-05-09'
+and subject='ENGLISH'
+)h on a.school_id=h.school_id
+
+left join
+(select distinct school_id,trim(school_adm_name) school_adm_name,--每个学校的专员
+  trim(group_adm_name) group_adm_name,--市经理
+group_name,--所属部门
+region_name--所属大区
+from tmp.school_region_ref_info
+where dt='2018-05-09'
+---and school_level='1' 
+)g on a.school_id=g.school_id
+```

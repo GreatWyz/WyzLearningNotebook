@@ -115,3 +115,6 @@ where dt='2018-05-09'
 ---and school_level='1' 
 )g on a.school_id=g.school_id
 ```
+
+**进入MySQL数据库**  
+在终端输入/usr/local/mysql/bin/mysql -u root -p  

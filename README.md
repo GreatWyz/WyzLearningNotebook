@@ -51,11 +51,11 @@ on a.teacher_id=b.user_id
 @2018/5/10
 
 **开启hadoop**  
-进入sbin文件夹  
-输入hadoop namenode -format，格式化namenode  
-输入./start-all.sh开启所有服务  
-输入jps可以查看所有Java进程和pid  
-用浏览器访问localhost：8088和localhost：50070
+进入sbin文件夹    
+输入hadoop namenode -format，格式化namenode    
+输入./start-all.sh开启所有服务   
+输入jps可以查看所有Java进程和pid    
+用浏览器访问localhost：8088和localhost：50070  
 
 ```
 --2.中学全量数据

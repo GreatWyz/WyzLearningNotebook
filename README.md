@@ -124,4 +124,5 @@ where dt='2018-05-09'
 ```SET mapreduce.map.memory.mb=4096;  
 SET mapreduce.reduce.memory.mb=8192;  
 SET mapreduce.map.java.opts=-Xmx9216m;
-SET hive.exec.parallel=TRUE;  ```
+SET hive.exec.parallel=TRUE;```  
+

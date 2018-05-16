@@ -118,3 +118,10 @@ where dt='2018-05-09'
 
 **进入MySQL数据库**  
 在终端输入/usr/local/mysql/bin/mysql -u root -p  
+
+@2018/5/16  
+
+```SET mapreduce.map.memory.mb=4096;  
+SET mapreduce.reduce.memory.mb=8192;  
+SET mapreduce.map.java.opts=-Xmx9216m;
+SET hive.exec.parallel=TRUE;  ```

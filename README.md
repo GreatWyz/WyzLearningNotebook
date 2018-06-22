@@ -128,3 +128,33 @@ SET mapreduce.map.java.opts=-Xmx9216m;
 SET hive.exec.parallel=TRUE;  
 ```  
 
+@2018/6/23   
+好久没更新了哈   
+最近在研究python数据可视化，比较困扰我的一个问题是matplotlib中文显示乱码的问题   
+https://blog.csdn.net/cartoonjh/article/details/79050484   
+这个博客的思路是可行的   
+还有从csv导入数据时，应转换为gbk编码，代码如下：
+```   
+df = pd.read_csv("/路径/data.csv",encoding="gbk")
+```   
+附上一个运行成功的代码：   
+```   
+# -*- coding: utf-8 -*- 
+from pylab import mpl
+import json
+import pandas as pd  
+import numpy as np #科学计算
+from pandas import Series,DataFrame
+import matplotlib.pyplot as plt
+from matplotlib.font_manager import _rebuild
+_rebuild()
+mpl.rcParams['font.sans-serif']=[u'SimHei']
+mpl.rcParams['axes.unicode_minus']=False
+
+df = pd.read_csv("/路径/data.csv",encoding="gbk")
+df.other_city.value_counts().plot(kind='kde')
+plt.title(u"专员城市分布")
+plt.ylabel(u"人数")
+plt.show()
+```
+

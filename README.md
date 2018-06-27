@@ -156,5 +156,46 @@ df.other_city.value_counts().plot(kind='kde')
 plt.title(u"专员城市分布")
 plt.ylabel(u"人数")
 plt.show()
+```   
+
+@2018/6/27
+最近由于要用excel分析的同类型数据太多，需要重复劳动，尝试用python代替excel操作…感觉有点像机器学习的数据预处理过程，哈哈
+```
+import numpy as np
+import pandas as pd 
+
+df=pd.DataFrame(pd.read_csv('/Users/wuyizhan/Desktop/统测报告/data.csv'))
+
+df.head() 
+df.info() #查看表格基本信息
+
+datause=df[['学生ID','学校名称','班级名称','总成绩']]
+datause['班级数统计']=datause['学校名称']+datause['班级名称']
+
+#classcount表，计算班级数开始
+
+classcountB=datause[['学校名称','班级数统计']]
+classcountL=classcountB.drop_duplicates(subset='班级数统计',keep='first')
+classcount=pd.pivot_table(classcountL,index=['学校名称'],values=['班级数统计'],aggfunc=len)
+classcount
+
+#计算班级数结束
+
+dfnew=pd.pivot_table(datause,index=['学校名称'],values=['学生ID','总成绩'],aggfunc={'学生ID':len,'总成绩':np.sum}) #数据透视表
+dfnew
+
+dfnew.columns=['学生人数','学校总成绩和']
+dfnew['学校满分']=dfnew['学生人数']*100  #总分数值可改
+dfnew['学校得分率']=dfnew['学校总成绩和']/dfnew['学校满分']
+dfnew['学生平均得分']=dfnew['学校总成绩和']/dfnew['学生人数']
+dfnew['学生平均失分']=100-dfnew['学生平均得分'] #总分数值可改
+
+dfTable=pd.merge(dfnew,classcount,how='inner',on='学校名称') #将dfnew和classcount融合
+dfTable
+
+lastTable=dfTable[['学生人数','班级数统计','学生平均得分','学生平均失分','学校得分率']]
+lastTable
+
+lastTable.to_csv ("/Users/wuyizhan/Desktop/统测报告/result.csv" , encoding="utf-8-sig")
 ```
 

@@ -162,7 +162,7 @@ plt.ylabel(u"人数")
 plt.show()
 ```   
 
-@2018/6/27
+@2018/6/27   
 最近由于要用excel分析的同类型数据太多，需要重复劳动，尝试用python代替excel操作…感觉有点像机器学习的数据预处理过程，哈哈
 ```
 import numpy as np

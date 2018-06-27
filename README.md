@@ -1,6 +1,6 @@
 # WyzLearningNotebook   
 
-<font color=gray size=10>Hey,欢迎来到Wyz的记事本，希望对你有帮助！</font>    
+<font color=#A52A2A size=4 >Markdwon测试</font>  
    
 @2018/5/9
 

@@ -201,6 +201,181 @@ lastTable=dfTable[['学生人数','班级数统计','学生平均得分','学生
 lastTable
 
 lastTable.to_csv ("/Users/wuyizhan/Desktop/统测报告/result.csv" , encoding="utf-8-sig")
+```   
+
+@2018/6/29   
+```   
+import numpy as np
+import pandas as pd 
+
+#整体合并用outer取交集
+
+#读取数据
+
+df=pd.DataFrame(pd.read_csv('/Users/wuyizhan/Desktop/统测报告/data.csv'))
+
+#删除无用的列
+
+datause=df[['年级','学生ID','学校名称','班级名称','总成绩','听单词选择图片','听句子选句子','听句子选答语','听句子判断图片','听对话判断']]
+datause['班级数统计']=datause['学校名称']+datause['班级名称']
+datause
+
+#计算标准差
+
+gp=datause.groupby('学校名称')['总成绩'].std()
+gpstd=gp.to_frame()
+gpstd.columns=['该校该年级平均分标准差']
+
+#计算优、良、合格、待合格人数
+
+thebest=datause[datause['总成绩']>42.5] #计算各校优秀人数
+dfbest=pd.pivot_table(thebest,index=['学校名称'],values=['学生ID'],aggfunc=len)
+dfbest.columns=['该校该年级优秀学生数']
+
+theok=datause[(datause['总成绩']<42.5)&(datause['总成绩']>37.5)]
+dfok=pd.pivot_table(theok,index=['学校名称'],values=['学生ID'],aggfunc=len)
+dfok.columns=['该校该年级良学生数']
+
+thepass=datause[(datause['总成绩']<37.5)&(datause['总成绩']>30)]
+dfpass=pd.pivot_table(thepass,index=['学校名称'],values=['学生ID'],aggfunc=len)
+dfpass.columns=['该校该年级合格学生数']
+
+thebad=datause[datause['总成绩']<30]
+dfbad=pd.pivot_table(thebad,index=['学校名称'],values=['学生ID'],aggfunc=len)
+dfbad.columns=['该校该年级待合格学生数']
+
+pepcount1=pd.merge(dfbest,dfok,how='outer',on='学校名称') #子表融合
+pepcount2=pd.merge(pepcount1,dfpass,how='outer',on='学校名称')
+pepcount=pd.merge(pepcount2,dfbad,how='outer',on='学校名称')
+pepcount
+
+#classcount 计算班级数
+
+classcountB=datause[['学校名称','班级数统计']]
+classcountL=classcountB.drop_duplicates(subset='班级数统计',keep='first')
+classcount=pd.pivot_table(classcountL,index=['学校名称'],values=['班级数统计'],aggfunc=len)
+classcount
+
+#dfnew 总分数据透视表，计算平均分
+
+dfnew=pd.pivot_table(datause,index=['学校名称'],values=['学生ID','总成绩'],aggfunc={'学生ID':len,'总成绩':np.sum})
+dfnew
+
+dfnew.columns=['学生人数','学校总成绩和']
+dfnew['学校满分']=dfnew['学生人数']*50  #总分数值可改,此处为50
+dfnew['学校得分率']=dfnew['学校总成绩和']/dfnew['学校满分']
+dfnew['学生平均得分']=dfnew['学校总成绩和']/dfnew['学生人数']
+dfnew['学生平均失分']=50-dfnew['学生平均得分'] #总分数值可改
+
+dfnew1=dfnew[['学生人数','学生平均得分','学生平均失分','学校得分率']]
+
+#wordpic 听单词选择图片数据透视表
+
+wordpic=pd.pivot_table(datause,index=['学校名称'],values=['学生ID','听单词选择图片'],aggfunc={'学生ID':len,'听单词选择图片':np.sum})
+wordpic
+
+wordpicc=datause[datause['听单词选择图片']==10] #计算满分人数
+wordpiccount=pd.pivot_table(wordpicc,index=['学校名称'],values=['学生ID'],aggfunc=len)
+wordpiccount.columns=['听单词选择图片满分人数']
+
+wordpic.columns=['wordpic总分','学生人数']  #总分是指将该学校所有参与该题的学生得分全部加起来
+wordpic['wordpic满分']=wordpic['学生人数']*10  #听单词选图片分值可改
+wordpic['听单词选择图片得分率']=wordpic['wordpic总分']/wordpic['wordpic满分']
+wordpic['听单词选择图片平均得分']=wordpic['wordpic总分']/wordpic['学生人数']
+wordpic['听单词选择图片平均失分']=10-wordpic['听单词选择图片平均得分'] #听单词选图片分值可改
+
+wordpicL=pd.merge(wordpic,wordpiccount,how='outer',on='学校名称')
+
+wordpic1=wordpicL[['听单词选择图片平均得分','听单词选择图片平均失分','听单词选择图片得分率','听单词选择图片满分人数']]
+
+#sensen 听句子选句子数据透视表
+
+sensen=pd.pivot_table(datause,index=['学校名称'],values=['学生ID','听句子选句子'],aggfunc={'学生ID':len,'听句子选句子':np.sum})
+sensen
+
+sensenc=datause[datause['听句子选句子']==10] #计算满分人数
+sensencount=pd.pivot_table(sensenc,index=['学校名称'],values=['学生ID'],aggfunc=len)
+sensencount.columns=['听句子选句子满分人数']
+
+sensen.columns=['sensen总分','学生人数']  #总分是指将该学校所有参与该题的学生得分全部加起来
+sensen['sensen满分']=sensen['学生人数']*10  #听句子选句子分值可改
+sensen['听句子选句子得分率']=sensen['sensen总分']/sensen['sensen满分']
+sensen['听句子选句子平均得分']=sensen['sensen总分']/sensen['学生人数']
+sensen['听句子选句子平均失分']=10-sensen['听句子选句子平均得分'] #听句子选句子分值可改
+
+sensenL=pd.merge(sensen,sensencount,how='outer',on='学校名称')
+
+sensen1=sensenL[['听句子选句子平均得分','听句子选句子平均失分','听句子选句子得分率','听句子选句子满分人数']]
+
+#senans 听句子选答语数据透视表
+
+senans=pd.pivot_table(datause,index=['学校名称'],values=['学生ID','听句子选答语'],aggfunc={'学生ID':len,'听句子选答语':np.sum})
+senans
+
+senansc=datause[datause['听句子选答语']==10] #计算满分人数
+senanscount=pd.pivot_table(senansc,index=['学校名称'],values=['学生ID'],aggfunc=len)
+senanscount.columns=['听句子选答语满分人数']
+
+senans.columns=['senans总分','学生人数']  #总分是指将该学校所有参与该题的学生得分全部加起来
+senans['senans满分']=senans['学生人数']*10  #听句子选答语分值可改
+senans['听句子选答语得分率']=senans['senans总分']/senans['senans满分']
+senans['听句子选答语平均得分']=senans['senans总分']/senans['学生人数']
+senans['听句子选答语平均失分']=10-senans['听句子选答语平均得分'] #听句子选答语分值可改
+
+senansL=pd.merge(senans,senanscount,how='outer',on='学校名称')
+
+senans1=senansL[['听句子选答语平均得分','听句子选答语平均失分','听句子选答语得分率','听句子选答语满分人数']]
+
+#senpic 听句子判断图片数据透视表
+
+senpic=pd.pivot_table(datause,index=['学校名称'],values=['学生ID','听句子判断图片'],aggfunc={'学生ID':len,'听句子判断图片':np.sum})
+senpic
+
+senpicc=datause[datause['听句子判断图片']==10] #计算满分人数
+senpiccount=pd.pivot_table(senpicc,index=['学校名称'],values=['学生ID'],aggfunc=len)
+senpiccount.columns=['听句子判断图片满分人数']
+
+senpic.columns=['senpic总分','学生人数']  #总分是指将该学校所有参与该题的学生得分全部加起来
+senpic['senpic满分']=senpic['学生人数']*10  #听句子判断图片分值可改
+senpic['听句子判断图片得分率']=senpic['senpic总分']/senpic['senpic满分']
+senpic['听句子判断图片平均得分']=senpic['senpic总分']/senpic['学生人数']
+senpic['听句子判断图片平均失分']=10-senpic['听句子判断图片平均得分'] #听句子判断图片分值可改
+
+senpicL=pd.merge(senpic,senpiccount,how='outer',on='学校名称')
+
+senpic1=senpicL[['听句子判断图片平均得分','听句子判断图片平均失分','听句子判断图片得分率','听句子判断图片满分人数']]
+
+#conver 听对话判断数据透视表
+
+conver=pd.pivot_table(datause,index=['学校名称'],values=['学生ID','听对话判断'],aggfunc={'学生ID':len,'听对话判断':np.sum})
+conver
+
+converc=datause[datause['听对话判断']==10] #计算满分人数
+convercount=pd.pivot_table(converc,index=['学校名称'],values=['学生ID'],aggfunc=len)
+convercount.columns=['听对话判断满分人数']
+
+conver.columns=['conver总分','学生人数']  #总分是指将该学校所有参与该题的学生得分全部加起来
+conver['conver满分']=conver['学生人数']*10  #听对话判断分值可改
+conver['听对话判断得分率']=conver['conver总分']/conver['conver满分']
+conver['听对话判断平均得分']=conver['conver总分']/conver['学生人数']
+conver['听对话判断平均失分']=10-conver['听对话判断平均得分'] #听对话判断分值可改
+
+converL=pd.merge(conver,convercount,how='outer',on='学校名称')
+
+conver1=converL[['听对话判断平均得分','听对话判断平均失分','听对话判断得分率','听对话判断满分人数']]
+
+#将所有子表融合
+
+last1=pd.merge(dfnew1,classcount,how='outer',on='学校名称')
+last2=pd.merge(last1,wordpic1,how='outer',on='学校名称')
+last3=pd.merge(last2,sensen1,how='outer',on='学校名称')
+last4=pd.merge(last3,senans1,how='outer',on='学校名称')
+last5=pd.merge(last4,senpic1,how='outer',on='学校名称')
+last6=pd.merge(last5,conver1,how='outer',on='学校名称')
+last7=pd.merge(last6,pepcount,how='outer',on='学校名称')
+last=pd.merge(last7,gpstd,how='outer',on='学校名称')
+
+last.to_csv ("/Users/wuyizhan/Desktop/统测报告/result.csv",encoding="utf-8-sig")
 ```
 
 

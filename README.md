@@ -378,4 +378,37 @@ last=pd.merge(last7,gpstd,how='outer',on='学校名称')
 last.to_csv ("/Users/wuyizhan/Desktop/统测报告/result.csv",encoding="utf-8-sig")
 ```
 
+@2018/8/15   
+
+**利用Python按列拆分excel表格**   
+
+```   
+# -*- coding: utf-8 -*-
+import sys
+
+reload(sys)
+sys.setdefaultencoding("utf8")
+
+import pandas as pd
+
+data = pd.read_excel("/Users/wuyizhan/Desktop/zhongxue@20180815/data.xlsx")
+rows = data.shape[0]  # 获取行数 shape[1]获取列数
+department_list = []
+
+for i in range(rows):
+    temp = data[u"市"][i]
+    if temp not in department_list:
+        department_list.append(temp)  # 将销售部门的分类存在一个列表中
+
+for department in department_list:
+    new_df = pd.DataFrame()
+
+    for i in range(0, rows):
+        if data[u"市"][i] == department:
+            new_df = pd.concat([new_df, data.iloc[[i], :]], axis=0, ignore_index=True)
+
+    new_df.to_excel(str(department) + ".xls", index=False, encoding="utf-8-sig")  # 将每个销售部门存成一个新excel
+```   
+
+
 

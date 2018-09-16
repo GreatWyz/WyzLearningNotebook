@@ -409,6 +409,16 @@ for department in department_list:
 
     new_df.to_excel(str(department) + ".xls", index=False, encoding="utf-8-sig")  # 将每个销售部门存成一个新excel
 ```   
-
+2018/09/16   
+git基本操作   
+```
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$ git add -A
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$ git commit -m 'test'
+[master b660e9b] test
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$ git pull
+Already up to date.
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$ git push origin master
+```
 
 

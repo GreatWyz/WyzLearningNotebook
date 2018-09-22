@@ -585,6 +585,9 @@ wuyizhandeMacBook-Pro:admin-panel wuyizhan$ pm2 ls
 │ mock     │ 0  │ fork │ 0   │ errored │ 15      │ 0      │ 0%  │ 0 B    │ wuyizhan │ disabled │
 └──────────┴────┴──────┴─────┴─────────┴─────────┴────────┴─────┴────────┴──────────┴──────────┘
  Use `pm2 show <id|name>` to get more details about an app
+```   
+```
+export BASE_URL=localhost:10000/api
 ```
 
 

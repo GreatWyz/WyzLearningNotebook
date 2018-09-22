@@ -421,4 +421,170 @@ Already up to date.
 wuyizhandeMacBook-Pro:admin-panel wuyizhan$ git push origin master
 ```
 
+2018/09/22
+```
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$ git add -A
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$ git commit -m 'submit'
+[master fd4d00d] submit
+ 2 files changed, 9 insertions(+), 9 deletions(-)
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$ git push origin master
+To gitee.com:animeboy/admin-panel.git
+ ! [rejected]        master -> master (fetch first)
+error: failed to push some refs to 'git@gitee.com:animeboy/admin-panel.git'
+hint: Updates were rejected because the remote contains work that you do
+hint: not have locally. This is usually caused by another repository pushing
+hint: to the same ref. You may want to first integrate the remote changes
+hint: (e.g., 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$ git pull
+remote: Enumerating objects: 124, done.
+remote: Counting objects: 100% (88/88), done.
+remote: Compressing objects: 100% (42/42), done.
+remote: Total 46 (delta 23), reused 0 (delta 0)
+Unpacking objects: 100% (46/46), done.
+From gitee.com:animeboy/admin-panel
+   feabd80..3090db6  master     -> origin/master
+Merge made by the 'recursive' strategy.
+ mock.js                                                  |  14 ++-
+ mock/get-doc-list.json                                   |  16 +++
+ mock/get-task-comments.json                              |  47 ++++++++
+ src/components/comment/index.vue                         |  78 +++++---------
+ src/const/apilist.js                                     |  18 +++-
+ src/const/routes.js                                      |   7 +-
+ src/main.js                                              |   2 +-
+ src/store/index.js                                       |  16 +++
+ src/store/modules/project.js                             | 155 +++++++++++++++++++++++----
+ src/styles/index.scss                                    |  47 ++++++++
+ src/views/project/components/DocList.vue                 |  34 ++++++
+ src/views/project/components/DocSearch.vue               |  37 +++++--
+ src/views/project/components/TaskDetail/TaskDoc.vue      |  11 +-
+ src/views/project/components/TaskDetail/TaskProgress.vue |   6 +-
+ src/views/project/components/TaskDetail/TaskTurnover.vue |  12 +--
+ src/views/project/components/TaskList.vue                |  47 +-------
+ src/views/project/components/TaskSearch.vue              |  73 +++----------
+ src/views/project/detail/index.vue                       |  12 ++-
+ src/views/project/docs/index.vue                         |  63 +++++------
+ src/views/project/list/index.vue                         |  62 +++++++++--
+ src/views/project/tpl/components/CreateTpl.vue           | 122 +++++++++++++++++----
+ src/views/project/tpl/components/TplCard.vue             |  15 ++-
+ src/views/project/tpl/index.vue                          |  66 ++++--------
+ 23 files changed, 633 insertions(+), 327 deletions(-)
+ create mode 100644 mock/get-doc-list.json
+ create mode 100644 mock/get-task-comments.json
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$ git push origin master
+Counting objects: 13, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (11/11), done.
+Writing objects: 100% (13/13), 1.16 KiB | 1.16 MiB/s, done.
+Total 13 (delta 8), reused 0 (delta 0)
+remote: Powered by Gitee.com
+To gitee.com:animeboy/admin-panel.git
+   3090db6..aebd55f  master -> master
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$ git pull
+Already up to date.
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$ pm2 start mock
+[PM2] Spawning PM2 daemon with pm2_home=/Users/wuyizhan/.pm2
+[PM2] PM2 Successfully daemonized
+[PM2] Starting /Users/wuyizhan/Desktop/admin-panel/mock in fork_mode (1 instance)
+[PM2] Done.
+┌──────────┬────┬──────┬──────┬────────┬─────────┬────────┬─────┬───────────┬──────────┬──────────┐
+│ App name │ id │ mode │ pid  │ status │ restart │ uptime │ cpu │ mem       │ user     │ watching │
+├──────────┼────┼──────┼──────┼────────┼─────────┼────────┼─────┼───────────┼──────────┼──────────┤
+│ mock     │ 0  │ fork │ 9388 │ online │ 0       │ 0s     │ 0%  │ 19.1 MB   │ wuyizhan │ disabled │
+└──────────┴────┴──────┴──────┴────────┴─────────┴────────┴─────┴───────────┴──────────┴──────────┘
+ Use `pm2 show <id|name>` to get more details about an app
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$ vi /usr/local/etc/nginx/servers/admin.conf
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$ nginx -s reload
+nginx: [error] open() "/usr/local/var/run/nginx.pid" failed (2: No such file or directory)
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$ nginx
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$ nginx -s reload
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$ pm2 stop nginx
+[PM2][ERROR] Process nginx not found
+┌──────────┬────┬──────┬─────┬─────────┬─────────┬────────┬─────┬────────┬──────────┬──────────┐
+│ App name │ id │ mode │ pid │ status  │ restart │ uptime │ cpu │ mem    │ user     │ watching │
+├──────────┼────┼──────┼─────┼─────────┼─────────┼────────┼─────┼────────┼──────────┼──────────┤
+│ mock     │ 0  │ fork │ 0   │ errored │ 15      │ 0      │ 0%  │ 0 B    │ wuyizhan │ disabled │
+└──────────┴────┴──────┴─────┴─────────┴─────────┴────────┴─────┴────────┴──────────┴──────────┘
+ Use `pm2 show <id|name>` to get more details about an app
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$ node mock
+> Mock started on http://localhost:3000
+events.js:183
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE :::3000
+    at Object._errnoException (util.js:992:11)
+    at _exceptionWithHostPort (util.js:1014:20)
+    at Server.setupListenHandle [as _listen2] (net.js:1355:14)
+    at listenInCluster (net.js:1396:12)
+    at Server.listen (net.js:1480:7)
+    at Object.<anonymous> (/Users/wuyizhan/Desktop/admin-panel/mock.js:111:4)
+    at Module._compile (module.js:652:30)
+    at Object.Module._extensions..js (module.js:663:10)
+    at Module.load (module.js:565:32)
+    at tryModuleLoad (module.js:505:12)
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$ pm2 ls
+┌──────────┬────┬──────┬─────┬─────────┬─────────┬────────┬─────┬────────┬──────────┬──────────┐
+│ App name │ id │ mode │ pid │ status  │ restart │ uptime │ cpu │ mem    │ user     │ watching │
+├──────────┼────┼──────┼─────┼─────────┼─────────┼────────┼─────┼────────┼──────────┼──────────┤
+│ mock     │ 0  │ fork │ 0   │ errored │ 15      │ 0      │ 0%  │ 0 B    │ wuyizhan │ disabled │
+└──────────┴────┴──────┴─────┴─────────┴─────────┴────────┴─────┴────────┴──────────┴──────────┘
+ Use `pm2 show <id|name>` to get more details about an app
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$ node mock
+> Mock started on http://localhost:3000
+events.js:183
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE :::3000
+    at Object._errnoException (util.js:992:11)
+    at _exceptionWithHostPort (util.js:1014:20)
+    at Server.setupListenHandle [as _listen2] (net.js:1355:14)
+    at listenInCluster (net.js:1396:12)
+    at Server.listen (net.js:1480:7)
+    at Object.<anonymous> (/Users/wuyizhan/Desktop/admin-panel/mock.js:111:4)
+    at Module._compile (module.js:652:30)
+    at Object.Module._extensions..js (module.js:663:10)
+    at Module.load (module.js:565:32)
+    at tryModuleLoad (module.js:505:12)
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$ ps -aux | grep 3000
+ps: No user named 'x'
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$ ps -au | grep 3000
+ps: option requires an argument -- u
+usage: ps [-AaCcEefhjlMmrSTvwXx] [-O fmt | -o fmt] [-G gid[,gid...]]
+          [-g grp[,grp...]] [-u [uid,uid...]]
+          [-p pid[,pid...]] [-t tty[,tty...]] [-U user[,user...]]
+       ps [-L]
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$ netstat -nlp | grep 3000
+netstat: option requires an argument -- p
+Usage:  netstat [-AaLlnW] [-f address_family | -p protocol]
+        netstat [-gilns] [-f address_family]
+        netstat -i | -I interface [-w wait] [-abdgRtS]
+        netstat -s [-s] [-f address_family | -p protocol] [-w wait]
+        netstat -i | -I interface -s [-f address_family | -p protocol]
+        netstat -m [-m]
+        netstat -r [-Aaln] [-f address_family]
+        netstat -rs [-s]
+
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$ ps
+  PID TTY           TIME CMD
+ 3480 ttys000    0:00.01 /bin/bash -l
+ 3500 ttys000    0:00.26 node mock
+ 3501 ttys001    0:00.01 /bin/bash -l
+ 9501 ttys001    0:00.28 npm
+ 9503 ttys001    0:19.49 node /Users/wuyizhan/Desktop/admin-panel/node_modules/.bin/webpack
+ 3919 ttys002    0:00.02 -bash
+ 9307 ttys003    0:00.04 /bin/bash -l
+wuyizhandeMacBook-Pro:admin-panel wuyizhan$ pm2 ls
+┌──────────┬────┬──────┬─────┬─────────┬─────────┬────────┬─────┬────────┬──────────┬──────────┐
+│ App name │ id │ mode │ pid │ status  │ restart │ uptime │ cpu │ mem    │ user     │ watching │
+├──────────┼────┼──────┼─────┼─────────┼─────────┼────────┼─────┼────────┼──────────┼──────────┤
+│ mock     │ 0  │ fork │ 0   │ errored │ 15      │ 0      │ 0%  │ 0 B    │ wuyizhan │ disabled │
+└──────────┴────┴──────┴─────┴─────────┴─────────┴────────┴─────┴────────┴──────────┴──────────┘
+ Use `pm2 show <id|name>` to get more details about an app
+```
+
 

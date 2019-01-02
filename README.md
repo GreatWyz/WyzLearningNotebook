@@ -590,8 +590,8 @@ wuyizhandeMacBook-Pro:admin-panel wuyizhan$ pm2 ls
 export BASE_URL=localhost:10000/api
 ```
 
-2018/12/30
-Mac开机无限转圈
+2018/12/30   
+Mac开机无限转圈   
 病症：出现这个问题很可能是电脑系统升级后的之前第三方的软件应用的历史残留造成的。
 
 解决方案:删掉残留文件 /Library/LaunchDaemons/ 和/Library/LaunchAgents/ 
